@@ -16,6 +16,7 @@ class Program
 
         Console.WriteLine("1. Register");
         Console.WriteLine("2. Login");
+        Console.WriteLine("3. Display All Users");
         Console.Write("Choose an option: ");
         var choice = Console.ReadLine();
 
@@ -28,10 +29,13 @@ class Program
         {
             await Login(usersCollection);
         }
+        else if (choice == "3")
+        {
+            await DisplayAllUsers(usersCollection);
+        }
         else
         {
             Console.WriteLine("Invalid choice. Try Again...");
-            await Login(usersCollection);
         }
         Console.ReadLine();
     }
@@ -72,6 +76,15 @@ class Program
         }
 
         Console.WriteLine("Login successful.");
+    }
+
+    static async Task DisplayAllUsers(IMongoCollection<BsonDocument> usersCollection)
+    {
+        var users = await usersCollection.Find(new BsonDocument()).ToListAsync();
+        foreach (var user in users)
+        {
+            Console.WriteLine(user.ToString());
+        }
     }
 
     static string ReadPassword()
